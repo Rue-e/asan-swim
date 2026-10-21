@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>아산시장배 마스터즈 수영대회</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@1,900&family=Barlow+Condensed:wght@700;800&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* NINE 팀 카드 톤: 검은 바탕 + 가는 가로줄, 핑크 점선 레인 로프, 외곽선 9 워터마크, 핑크 띠 */
+:root{
+  --bg:#0c0c0d; --panel:#141415; --panel2:#1b1b1d; --ink:#f4f3f1; --sub:#a9a6a2; --dim:#6d6a67; --rule:#2a2a2c;
+  --pink:#d9467f; --pink-txt:#e98bb0; --pink-line:rgba(217,70,127,.45); --pink-ink:#111111; --paper:#f4f3f1; --paper-ink:#111111;
+  --cond:"Barlow Condensed","Noto Sans KR",system-ui,sans-serif;
+  --mono:"DM Mono","IBM Plex Mono",ui-monospace,monospace;
+  --kr:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --tabh:64px; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--kr);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 4px)}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.rope{height:3px;background:radial-gradient(circle,var(--pink) 1.2px,transparent 1.6px) 0 50%/7px 3px repeat-x;opacity:.5}
+
+/* 머리: 팀 카드 앞면 */
+.hero{position:relative;overflow:hidden;padding-block:22px 0}
+.hero::after{content:"9";position:absolute;right:-18px;top:-30px;font-family:var(--cond);font-weight:800;font-size:15rem;line-height:1;color:transparent;-webkit-text-stroke:2px #2c2c2e;pointer-events:none}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+.logo{display:inline-block;position:relative;font-family:"Barlow",var(--cond);font-style:italic;font-weight:900;font-size:2.6rem;line-height:.9;color:var(--pink);letter-spacing:-.04em;padding-bottom:10px}
+.logo::after{content:"";position:absolute;left:2px;bottom:0;width:115%;height:5px;background:var(--pink);border-radius:4px 0 0 4px;clip-path:polygon(0 30%,100% 0,100% 40%,0 100%)}
+.stamp{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--sub);text-align:right;line-height:1.7;text-transform:uppercase}
+.hero h1{position:relative;z-index:1;font-weight:900;font-size:1.55rem;line-height:1.2;letter-spacing:-.02em;margin:22px 0 4px;text-wrap:balance}
+.hero .where{position:relative;z-index:1;font-family:var(--mono);font-size:.76rem;color:var(--sub);letter-spacing:.04em;padding-bottom:16px}
+.band{background:var(--pink);color:var(--pink-ink)}
+.band .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:9px;font-family:var(--cond);font-weight:800;font-size:1.15rem;letter-spacing:.14em;text-transform:uppercase}
+.heart{display:inline-block;width:.85em;height:.78em;vertical-align:-.05em;margin:0 .18em}
+.heart path{fill:var(--paper)}
+
+main{padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 28px)}
+section{padding-top:18px}
+.label{font-family:var(--kr);font-size:.78rem;letter-spacing:.02em;color:var(--sub);text-transform:uppercase;margin:0 0 10px}
+h2{font-family:var(--cond);font-weight:800;font-size:1.5rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 12px}
+.helplist{margin:16px 2px 14px;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;color:var(--sub);font-size:.86rem}
+.helplist li::before{content:"·";color:var(--pink-txt);font-weight:900;margin-right:8px}
+.flex-note{margin:0 0 14px;padding:10px 12px;border:1px solid #2e2e31;border-left:3px solid var(--pink);border-radius:8px;background:var(--panel);font-size:.86rem;color:var(--ink)}
+.note{color:var(--sub);font-size:.8rem;margin:12px 2px 0}
+
+/* 아래 탭 */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#0a0a0a;border-top:1px solid var(--rule);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr);height:var(--tabh)}
+.tabs button{background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.72rem;font-weight:500;color:var(--dim);cursor:pointer;position:relative}
+.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-selected="true"]{color:var(--ink);font-weight:700}
+.tabs button[aria-selected="true"]::before{content:"";position:absolute;top:-1px;left:30%;right:30%;height:3px;background:var(--pink)}
+
+/* 검색 */
+.searchbox{position:relative}
+.searchbox input{width:100%;font:500 1.05rem var(--kr);padding:15px 46px 15px 16px;border-radius:14px;border:1.5px solid #3a3a3d;background:var(--panel);color:var(--ink);-webkit-appearance:none;appearance:none}
+.searchbox input::placeholder{color:var(--dim)}
+.searchbox input:focus{outline:none;border-color:var(--pink)}
+.clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;background:#2c2c2e;cursor:pointer;font-size:1rem;line-height:1;color:var(--ink)}
+.hint{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hint button{border:1px solid #333336;background:var(--panel);border-radius:999px;padding:6px 12px;font-size:.84rem;cursor:pointer;color:var(--ink)}
+.hint button.nine{border-color:var(--pink-line);color:var(--pink-txt);font-weight:600}
+.count{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;color:var(--sub);margin:18px 2px 10px}
+.helptext{color:var(--sub);font-size:.88rem;margin:16px 2px 8px}
+.people{display:flex;flex-direction:column;gap:12px}
+
+/* 선수 카드 = 팀 카드 축소판 */
+.person{position:relative;background:var(--panel);border-radius:16px;overflow:hidden;border:1px solid #232325}
+.person .top{position:relative;padding:14px 16px 12px}
+.person.nine .top::after{content:"9";position:absolute;right:-6px;top:-22px;font-family:var(--cond);font-weight:800;font-size:7rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px #2c2c2e;pointer-events:none}
+.person .pn{position:relative;font-size:1.6rem;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.person .pt{position:relative;font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;color:var(--sub);text-transform:uppercase;margin-top:2px}
+.person.nine .pt{color:var(--pink-txt)}
+.person .list{background:var(--panel2)}
+.entry{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;padding:10px 16px;border-top:1px dotted #333}
+.entry .ev{min-width:0}
+.entry .ev b{display:block;font-weight:700;font-size:.95rem}
+.entry .ev span{display:block;font-family:var(--mono);font-size:.72rem;color:var(--sub);letter-spacing:.03em}
+.person .foot{display:flex;justify-content:space-between;align-items:center;padding:7px 16px;background:var(--paper);color:var(--paper-ink);font-family:var(--cond);font-weight:800;letter-spacing:.14em;font-size:.95rem;text-transform:uppercase}
+.person.nine .foot{background:var(--pink);color:var(--pink-ink)}
+.person .foot .heart path{fill:var(--pink)}
+.person.nine .foot .heart path{fill:var(--paper)}
+mark{background:none;color:var(--pink-txt);text-decoration:underline;text-underline-offset:3px}
+
+/* 레인 번호판 */
+.plate{width:48px;height:48px;border-radius:9px;background:var(--paper);color:var(--paper-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.plate small{font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;opacity:.7}
+.plate b{font-family:var(--cond);font-weight:800;font-size:1.7rem;font-variant-numeric:tabular-nums}
+.plate.pk{background:var(--pink);color:var(--pink-ink)}
+.plate.sm{width:34px;height:34px;border-radius:7px}
+.plate.sm b{font-size:1.25rem}
+.plate.sm small{display:none}
+
+/* 시간표 */
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline::before{content:"";position:absolute;left:63px;top:12px;bottom:12px;width:2px;background:radial-gradient(circle,var(--pink) 1px,transparent 1.4px) 50% 0/2px 6px repeat-y;opacity:.4}
+.tl{display:grid;grid-template-columns:54px 20px 1fr;gap:0 8px;align-items:start;padding:7px 0}
+.tl .clock{font-family:var(--cond);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.15rem;letter-spacing:.03em;text-align:right;padding-top:8px}
+.tl .dot{width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--sub);margin:14px 0 0 4px;position:relative;z-index:1}
+.tl.rest .dot{border-color:#3a3a3d}
+.tl.rest .clock{color:var(--dim)}
+.tl.now .dot{background:var(--pink);box-shadow:0 0 0 4px rgba(255,42,138,.25)}
+.tl .box{background:var(--panel);border:1px solid #232325;border-radius:12px;padding:10px 12px;text-align:left;width:100%;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.tl.rest .box{background:none;border:0;padding:9px 0 0;cursor:default;color:var(--dim);font-size:.86rem}
+.tl .box .nm{font-weight:700;display:block}
+.tl .box .meta{font-family:var(--mono);font-size:.72rem;color:var(--sub);display:block}
+.tl .box .arrow{color:var(--pink-txt);flex:none;font-size:.8rem;font-weight:700}
+.tl.now .box{border-color:var(--pink)}
+.badge{display:inline-block;font-family:var(--cond);font-size:.78rem;font-weight:800;letter-spacing:.1em;background:var(--pink);color:var(--pink-ink);padding:0 6px;border-radius:3px;margin-left:6px;vertical-align:2px}
+
+/* 조편성 */
+.seg{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none;border:1px solid #333336;background:var(--panel);border-radius:999px;padding:7px 13px;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+.heats{display:flex;flex-direction:column;gap:12px}
+.heat{background:var(--panel);border:1px solid #232325;border-radius:14px;overflow:hidden}
+.heat h3{margin:0;padding:10px 14px;display:flex;gap:10px;align-items:baseline;font-size:.92rem;font-weight:700;border-bottom:1px dotted #3a3a3d}
+.heat h3 .no{font-family:var(--cond);font-weight:800;font-size:1.25rem;color:var(--pink-txt);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.heat ol{list-style:none;margin:0;padding:5px 0}
+.heat li{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:4px 14px}
+.heat li .who{font-weight:500;min-width:0}
+.heat li .club{font-family:var(--mono);font-size:.74rem;color:var(--sub);text-align:right;letter-spacing:.04em}
+.heat li.nine .who,.heat li.nine .club{color:var(--pink-txt)}
+.heat li.empty .plate{background:#232325;color:var(--dim)}
+.heat li.empty .who{color:var(--dim);font-weight:400}
+
+/* PDF */
+.pdfbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
+.pdfbar h2{margin:0}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--pink);color:var(--pink-ink);padding:9px 14px;border-radius:10px;font-weight:700;font-size:.88rem;text-decoration:none;cursor:pointer}
+.pages{display:flex;flex-direction:column;gap:10px}
+.pages canvas{width:100%;height:auto;display:block;background:#fff;border-radius:6px}
+.loading{color:var(--sub);text-align:center;padding:30px 0}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero"><div class="wrap">
+  <div class="row"><span class="logo">Nine</span><div class="stamp">Swim Meet<br>2026 · 10 · 25</div></div>
+  <h1>아산시 시장배<br>마스터즈 수영대회</h1>
+  <div class="where">아산배미수영장 · FIRST RACE 11:00 · 191 SWIMMERS</div>
+</div><div class="rope"></div><div class="wrap" style="height:14px"></div><div class="rope"></div></header>
+<div class="band"><div class="wrap"><span>Heat Sheet</span><span>I<svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.5C5 16 1 12.3 1 7.4 1 3.9 3.7 1 7.1 1c2 0 3.8 1 4.9 2.6C13.1 2 14.9 1 16.9 1 20.3 1 23 3.9 23 7.4c0 4.9-4 8.6-11 14.1z"/></svg>AM 9</span></div></div>
+
+<main class="wrap">
+<section id="v-find">
+  <div class="searchbox">
+    <input id="q" type="search" placeholder="이름 또는 팀 이름 검색" autocomplete="off" enterkeyhint="search" aria-label="이름 또는 팀 이름 검색">
+    <button class="clear" id="clr" aria-label="지우기" hidden>×</button>
+  </div>
+  <div id="findres"></div>
+</section>
+
+<section id="v-sched" hidden>
+  <h2>Schedule</h2><p class="label">경기 시간표</p><p class="flex-note">경기 일정상 시간 변동 가능</p>
+  <ol class="timeline" id="sched"></ol>
+  <p class="note">각 경기 후 1·2·3위 현장 시상</p>
+</section>
+
+<section id="v-heats" hidden>
+  <div class="seg" id="evchips"></div>
+  <div class="seg" id="sexchips"></div>
+  <div class="heats" id="heatlist"></div>
+</section>
+
+<section id="v-pdf" hidden>
+  <div class="pdfbar">
+    <div><h2>Original PDF</h2><p class="label" style="margin:0">원본 대회 요강</p></div>
+    <a class="btn" href="heatsheet.pdf" target="_blank" rel="noopener">PDF 파일로 열기</a>
+  </div>
+  <div class="pages" id="pages"><p class="loading">불러오는 중…</p></div>
+</section>
+</main>
+
+<nav class="tabs"><div class="wrap" role="tablist">
+  <button role="tab" data-v="find" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>검색</button>
+  <button role="tab" data-v="sched" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>시간표</button>
+  <button role="tab" data-v="heats" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>조 편성</button>
+  <button role="tab" data-v="pdf" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>원본 PDF</button>
+</div></nav>
+
+<script src="pdf.min.js"></script>
+<script>
+const HEATS=[{"no": "101-1", "title": "혼성성인부 계영 200m", "lanes": [{"lane": 2, "team": "폴링"}, {"lane": 3, "team": "NINE B"}, {"lane": 4, "team": "웨이브 B"}, {"lane": 5, "team": "4 J"}, {"lane": 6, "team": "IM 7"}, {"lane": 7, "team": "IM STAR"}]}, {"no": "101-2", "title": "혼성성인부 계영 200m", "lanes": [{"lane": 2, "team": "롤링"}, {"lane": 3, "team": "웨이브 A"}, {"lane": 4, "team": "NINE A"}, {"lane": 5, "team": "TOP 10"}, {"lane": 6, "team": "일레븐 A"}, {"lane": 7, "team": "개미지옥 PM7"}]}, {"no": "102-1", "title": "남자성인부 짝핀자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "최원진", "team": "4 J"}, {"lane": 4, "name": "장재원", "team": "NINE A"}, {"lane": 5, "name": "송윤근", "team": "TOP 10"}, {"lane": 6, "name": "장석현", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "102-2", "title": "남자성인부 짝핀자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "강승원", "team": "IM 7"}, {"lane": 4, "name": "하동훈", "team": "웨이브 B"}, {"lane": 5, "name": "오현표", "team": "웨이브 B"}, {"lane": 6, "name": "김무성", "team": "폴링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "103-1", "title": "여자성인부 짝핀자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "안종경", "team": "TOP 10"}, {"lane": 4, "name": "윤소영", "team": "개미지옥 PM7"}, {"lane": 5, "name": "정지민", "team": "웨이브 C"}, {"lane": 6, "name": "최선일", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "103-2", "title": "여자성인부 짝핀자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "윤혜영", "team": "개미지옥 PM7"}, {"lane": 4, "name": "강주현", "team": "웨이브 C"}, {"lane": 5, "name": "안효빈", "team": "IM 7"}, {"lane": 6, "name": "권나현", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "103-3", "title": "여자성인부 짝핀자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "이하아린", "team": "웨이브 B"}, {"lane": 3, "name": "박주영", "team": "폴링"}, {"lane": 4, "name": "장원", "team": "IM 7"}, {"lane": 5, "name": "신나영", "team": "롤링"}, {"lane": 6, "name": "장미", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "104-1", "title": "남자성인부 짝핀자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "김민욱", "team": "개미지옥 PM7"}, {"lane": 3, "name": "박신호", "team": "웨이브 B"}, {"lane": 4, "name": "정형진", "team": "NINE C"}, {"lane": 5, "name": "최재희", "team": "일레븐 B"}, {"lane": 6, "name": "김수현", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "104-2", "title": "남자성인부 짝핀자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "김대호", "team": "NINE B"}, {"lane": 3, "name": "윤승영", "team": "웨이브 A"}, {"lane": 4, "name": "방민철", "team": "개미지옥 PM7"}, {"lane": 5, "name": "전진형", "team": "폴링"}, {"lane": 6, "name": "임대건", "team": "일레븐 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "104-3", "title": "남자성인부 짝핀자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "최원경", "team": "폴링"}, {"lane": 3, "name": "김동협", "team": "개미지옥 PM7"}, {"lane": 4, "name": "박병관", "team": "폴링"}, {"lane": 5, "name": "편진식", "team": "개미지옥 PM7"}, {"lane": 6, "name": "양영목", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "105-1", "title": "여자성인부 짝핀자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "송효희", "team": "웨이브 B"}, {"lane": 3, "name": "유선애", "team": "하이파이브"}, {"lane": 4, "name": "박은숙", "team": "웨이브 A"}, {"lane": 5, "name": "이은영", "team": "NINE C"}, {"lane": 6, "name": "김지혜", "team": "웨이브 B"}, {"lane": 7, "name": "이진아", "team": "폴링"}]}, {"no": "105-2", "title": "여자성인부 짝핀자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "백윤희", "team": "일레븐 A"}, {"lane": 3, "name": "김정옥", "team": "IM STAR"}, {"lane": 4, "name": "신효선", "team": "TOP 10"}, {"lane": 5, "name": "정혜란", "team": "일레븐 A"}, {"lane": 6, "name": "이상미", "team": "웨이브 A"}, {"lane": 7, "name": "김현숙", "team": "웨이브 B"}]}, {"no": "106-1", "title": "남자성인부 짝핀자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "엄태흠", "team": "폴링"}, {"lane": 3, "name": "이장길", "team": "개미지옥 PM7"}, {"lane": 4, "name": "김세규", "team": "IM STAR"}, {"lane": 5, "name": "설권영", "team": "일레븐 B"}, {"lane": 6, "name": "이근화", "team": "NINE B"}, {"lane": 7, "name": "방현우", "team": "폴링"}]}, {"no": "106-2", "title": "남자성인부 짝핀자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "전형성", "team": "폴링"}, {"lane": 3, "name": "김일윤", "team": "NINE B"}, {"lane": 4, "name": "장종석", "team": "롤링"}, {"lane": 5, "name": "김관중", "team": "일레븐 A"}, {"lane": 6, "name": "오성택", "team": "TOP 10"}, {"lane": 7, "name": "정한희", "team": "폴링"}]}, {"no": "107", "title": "여자성인부 짝핀자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "정은식", "team": "TOP 10"}, {"lane": 4, "name": "장기정", "team": "일레븐 A"}, {"lane": 5, "name": "김은미", "team": "IM 7"}, {"lane": 6, "name": "김주양", "team": "롤링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "108", "title": "남자성인부 짝핀자유형 50m 4그룹", "lanes": [{"lane": 2, "name": "김시덕", "team": "NINE A"}, {"lane": 3, "name": "김남섭", "team": "TOP 10"}, {"lane": 4, "name": "조원준", "team": "일레븐 A"}, {"lane": 5, "name": "김명환", "team": "롤링"}, {"lane": 6, "name": "박문수", "team": "롤링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "109", "title": "여자성인부 짝핀자유형 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "우금욱", "team": "롤링"}, {"lane": 4, "name": "신미현", "team": "웨이브 A"}, {"lane": 5, "name": "박혜숙", "team": "일레븐 A"}, {"lane": 6, "name": "연인숙", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "110", "title": "남자성인부 배영 50m 1그룹", "lanes": [{"lane": 2, "name": "오인성", "team": "IM STAR"}, {"lane": 3, "name": "김강산", "team": "NINE A"}, {"lane": 4, "name": "하현효", "team": "IM 7"}, {"lane": 5, "name": "하동훈", "team": "웨이브 B"}, {"lane": 6, "name": "임성택", "team": "IM STAR"}, {"lane": 7, "name": "오현표", "team": "웨이브 B"}]}, {"no": "111-1", "title": "여자성인부 배영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "정재윤", "team": "4 J"}, {"lane": 4, "name": "윤소영", "team": "개미지옥 PM7"}, {"lane": 5, "name": "최미례", "team": "NINE C"}, {"lane": 6, "name": "최정화", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "111-2", "title": "여자성인부 배영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "오세미", "team": "일레븐 A"}, {"lane": 4, "name": "장환", "team": "IM 7"}, {"lane": 5, "name": "박주영", "team": "폴링"}, {"lane": 6, "name": "윤지선", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "112-1", "title": "남자성인부 배영 50m 2그룹", "lanes": [{"lane": 2, "name": "김호열", "team": "IM 7"}, {"lane": 3, "name": "이은진", "team": "웨이브 B"}, {"lane": 4, "name": "이효택", "team": "남자셋여자셋"}, {"lane": 5, "name": "송동석", "team": "일레븐 A"}, {"lane": 6, "name": "김유영", "team": "IM STAR"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "112-2", "title": "남자성인부 배영 50m 2그룹", "lanes": [{"lane": 2, "name": "서봉석", "team": "웨이브 B"}, {"lane": 3, "name": "임정호", "team": "개미지옥 PM7"}, {"lane": 4, "name": "이종명", "team": "NINE A"}, {"lane": 5, "name": "김길수", "team": "웨이브 A"}, {"lane": 6, "name": "윤승영", "team": "웨이브 A"}, {"lane": 7, "name": "이성진", "team": "폴링"}]}, {"no": "113-1", "title": "여자성인부 배영 50m 2그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "장은영", "team": "개인"}, {"lane": 4, "name": "허진영", "team": "4 J"}, {"lane": 5, "name": "강은정", "team": "일레븐 A"}, {"lane": 6, "name": "김아리", "team": "IM STAR"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "113-2", "title": "여자성인부 배영 50m 2그룹", "lanes": [{"lane": 2, "name": "이진아", "team": "폴링"}, {"lane": 3, "name": "이명자", "team": "IM STAR"}, {"lane": 4, "name": "원지혜", "team": "NINE B"}, {"lane": 5, "name": "양혜윤", "team": "NINE A"}, {"lane": 6, "name": "김은혜", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "114", "title": "남자성인부 배영 50m 3그룹", "lanes": [{"lane": 2, "name": "장종섭", "team": "롤링"}, {"lane": 3, "name": "현철환", "team": "TOP 10"}, {"lane": 4, "name": "고재철", "team": "NINE A"}, {"lane": 5, "name": "서종경", "team": "웨이브 A"}, {"lane": 6, "name": "이철희", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "115,117", "title": "여자성인부 배영 50m 3-4그룹", "lanes": [{"lane": 2, "name": "이정현", "team": "개미지옥 PM7"}, {"lane": 3, "name": "박효민", "team": "IM STAR"}, {"lane": 4, "name": "이혜진", "team": "웨이브 A"}, {"lane": 5, "name": "", "team": ""}, {"lane": 6, "name": "서승희", "team": "NINE A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "116", "title": "남자성인부 배영 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "김선수", "team": "NINE A"}, {"lane": 4, "name": "유현규", "team": "TOP 10"}, {"lane": 5, "name": "배영호", "team": "NINE A"}, {"lane": 6, "name": "이가헌", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "118-1", "title": "남자성인부 접영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "김동현", "team": "IM STAR"}, {"lane": 4, "name": "박건유", "team": "웨이브 B"}, {"lane": 5, "name": "김효섭", "team": "IM 7"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "118-2", "title": "남자성인부 접영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "성민욱", "team": "TOP 10"}, {"lane": 4, "name": "오민우", "team": "IM STAR"}, {"lane": 5, "name": "김정현", "team": "NINE A"}, {"lane": 6, "name": "신의균", "team": "롤링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "119-1", "title": "여자성인부 접영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "서어진", "team": "NINE B"}, {"lane": 4, "name": "오세미", "team": "일레븐 A"}, {"lane": 5, "name": "신나영", "team": "롤링"}, {"lane": 6, "name": "민시현", "team": "일레븐 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "119-2", "title": "여자성인부 접영 50m 1그룹", "lanes": [{"lane": 2, "name": "임소리", "team": "일레븐 A"}, {"lane": 3, "name": "박선영", "team": "NINE B"}, {"lane": 4, "name": "김수연", "team": "TOP 10"}, {"lane": 5, "name": "박혜인", "team": "IM STAR"}, {"lane": 6, "name": "권민영", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "120-1", "title": "남자성인부 접영 50m 2그룹", "lanes": [{"lane": 2, "name": "박성배", "team": "개인"}, {"lane": 3, "name": "홍성환", "team": "개인"}, {"lane": 4, "name": "한철규", "team": "하이파이브"}, {"lane": 5, "name": "성제림", "team": "개미지옥 PM7"}, {"lane": 6, "name": "장우혁", "team": "개인"}, {"lane": 7, "name": "이광철", "team": "NINE C"}]}, {"no": "120-2", "title": "남자성인부 접영 50m 2그룹", "lanes": [{"lane": 2, "name": "장인택", "team": "웨이브 A"}, {"lane": 3, "name": "이효택", "team": "남자셋여자셋"}, {"lane": 4, "name": "강인한", "team": "NINE A"}, {"lane": 5, "name": "임정호", "team": "개미지옥 PM7"}, {"lane": 6, "name": "신지훈", "team": "NINE B"}, {"lane": 7, "name": "김기중", "team": "롤링"}]}, {"no": "121", "title": "여자성인부 접영 50m 2그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "권수연", "team": "일레븐 B"}, {"lane": 4, "name": "박은정", "team": "개미지옥 PM7"}, {"lane": 5, "name": "김정연", "team": "NINE B"}, {"lane": 6, "name": "손은영", "team": "웨이브 C"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "122,124", "title": "남자성인부 접영 50m 3-4그룹", "lanes": [{"lane": 2, "name": "권춘기", "team": "NINE B"}, {"lane": 3, "name": "정성구", "team": "일레븐 A"}, {"lane": 4, "name": "이춘섭", "team": "IM STAR"}, {"lane": 5, "name": "김상철", "team": "웨이브 A"}, {"lane": 6, "name": "고재철", "team": "NINE A"}, {"lane": 7, "name": "배영호", "team": "NINE A"}]}, {"no": "123", "title": "여자성인부 접영 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "김선영", "team": "TOP 10"}, {"lane": 4, "name": "강도정", "team": "일레븐 A"}, {"lane": 5, "name": "서하나", "team": "NINE A"}, {"lane": 6, "name": "윤현희", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "125", "title": "여자성인부 접영 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "박혜숙", "team": "일레븐 A"}, {"lane": 4, "name": "서승희", "team": "NINE A"}, {"lane": 5, "name": "이찬숙", "team": "웨이브 A"}, {"lane": 6, "name": "김명희", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "126", "title": "남자성인부 평영 50m 1그룹", "lanes": [{"lane": 2, "name": "사재학", "team": "4 J"}, {"lane": 3, "name": "김재환", "team": "개미지옥 PM7"}, {"lane": 4, "name": "성민욱", "team": "TOP 10"}, {"lane": 5, "name": "강승원", "team": "IM 7"}, {"lane": 6, "name": "조중훈", "team": "롤링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "127-1", "title": "여자성인부 평영 50m 1그룹", "lanes": [{"lane": 2, "name": "정수영", "team": "IM 7"}, {"lane": 3, "name": "이아연", "team": "개미지옥 PM7"}, {"lane": 4, "name": "정재윤", "team": "4 J"}, {"lane": 5, "name": "최미례", "team": "NINE C"}, {"lane": 6, "name": "민시현", "team": "일레븐 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "127-2", "title": "여자성인부 평영 50m 1그룹", "lanes": [{"lane": 2, "name": "장미", "team": "IM 7"}, {"lane": 3, "name": "윤혜영", "team": "개미지옥 PM7"}, {"lane": 4, "name": "권민영", "team": "NINE B"}, {"lane": 5, "name": "김수연", "team": "TOP 10"}, {"lane": 6, "name": "임소리", "team": "일레븐 A"}, {"lane": 7, "name": "이혜진", "team": "롤링"}]}, {"no": "128-1", "title": "남자성인부 평영 50m 2그룹", "lanes": [{"lane": 2, "name": "윤승영", "team": "웨이브 A"}, {"lane": 3, "name": "이광철", "team": "NINE C"}, {"lane": 4, "name": "함영수", "team": "IM STAR"}, {"lane": 5, "name": "신준식", "team": "일레븐 A"}, {"lane": 6, "name": "김서후", "team": "개미지옥 PM7"}, {"lane": 7, "name": "박건규", "team": "롤링"}]}, {"no": "128-2", "title": "남자성인부 평영 50m 2그룹", "lanes": [{"lane": 2, "name": "이춘영", "team": "NINE B"}, {"lane": 3, "name": "김길수", "team": "웨이브 A"}, {"lane": 4, "name": "김호열", "team": "IM 7"}, {"lane": 5, "name": "최원경", "team": "폴링"}, {"lane": 6, "name": "신동광", "team": "웨이브 B"}, {"lane": 7, "name": "박성근", "team": "롤링"}]}, {"no": "129-1", "title": "여자성인부 평영 50m 2그룹", "lanes": [{"lane": 2, "name": "김지혜", "team": "웨이브 B"}, {"lane": 3, "name": "양혜윤", "team": "NINE A"}, {"lane": 4, "name": "김아리", "team": "IM STAR"}, {"lane": 5, "name": "이혜진", "team": "NINE C"}, {"lane": 6, "name": "구옥진", "team": "하이파이브"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "129-2", "title": "여자성인부 평영 50m 2그룹", "lanes": [{"lane": 2, "name": "이진아", "team": "폴링"}, {"lane": 3, "name": "이은영", "team": "NINE C"}, {"lane": 4, "name": "엄윤진", "team": "TOP 10"}, {"lane": 5, "name": "김수미", "team": "일레븐 B"}, {"lane": 6, "name": "송민영", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "129-3", "title": "여자성인부 평영 50m 2그룹", "lanes": [{"lane": 2, "name": "송효희", "team": "웨이브 B"}, {"lane": 3, "name": "강은정", "team": "일레븐 A"}, {"lane": 4, "name": "이지영", "team": "폴링"}, {"lane": 5, "name": "남지선", "team": "NINE A"}, {"lane": 6, "name": "김정연", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "130", "title": "남자성인부 평영 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "오성택", "team": "TOP 10"}, {"lane": 4, "name": "이철희", "team": "IM 7"}, {"lane": 5, "name": "정한희", "team": "폴링"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "131,133", "title": "여자성인부 평영 50m 3-4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "곽노희", "team": "웨이브 A"}, {"lane": 4, "name": "", "team": ""}, {"lane": 5, "name": "제금란", "team": "NINE A"}, {"lane": 6, "name": "신미현", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "132", "title": "남자성인부 평영 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "윤주현", "team": "개인"}, {"lane": 4, "name": "조동오", "team": "NINE A"}, {"lane": 5, "name": "정연식", "team": "웨이브 A"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "134-1", "title": "남자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "이관민", "team": "IM STAR"}, {"lane": 4, "name": "장석현", "team": "웨이브 B"}, {"lane": 5, "name": "방정규", "team": "IM 7"}, {"lane": 6, "name": "오인성", "team": "IM STAR"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "134-2", "title": "남자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "김효섭", "team": "IM 7"}, {"lane": 3, "name": "김재환", "team": "개미지옥 PM7"}, {"lane": 4, "name": "사재학", "team": "4 J"}, {"lane": 5, "name": "김동현", "team": "IM STAR"}, {"lane": 6, "name": "김정현", "team": "NINE A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "134-3", "title": "남자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "오민우", "team": "IM STAR"}, {"lane": 3, "name": "김강산", "team": "NINE A"}, {"lane": 4, "name": "김무성", "team": "롤링"}, {"lane": 5, "name": "임성택", "team": "IM STAR"}, {"lane": 6, "name": "하현호", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "135-1", "title": "여자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "이하아린", "team": "웨이브 B"}, {"lane": 4, "name": "이아연", "team": "개미지옥 PM7"}, {"lane": 5, "name": "박선영", "team": "NINE B"}, {"lane": 6, "name": "정지민", "team": "웨이브 C"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "135-2", "title": "여자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "서어진", "team": "NINE B"}, {"lane": 4, "name": "김수연", "team": "TOP 10"}, {"lane": 5, "name": "박혜인", "team": "IM STAR"}, {"lane": 6, "name": "최선일", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "135-3", "title": "여자성인부 자유형 50m 1그룹", "lanes": [{"lane": 2, "name": "김채린", "team": "폴링"}, {"lane": 3, "name": "장현정", "team": "개미지옥 PM7"}, {"lane": 4, "name": "최정화", "team": "NINE B"}, {"lane": 5, "name": "강주현", "team": "웨이브 C"}, {"lane": 6, "name": "김다혜", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "136-1", "title": "남자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "홍성환", "team": "개인"}, {"lane": 3, "name": "박신호", "team": "웨이브 B"}, {"lane": 4, "name": "김유영", "team": "IM STAR"}, {"lane": 5, "name": "최재희", "team": "일레븐 B"}, {"lane": 6, "name": "장우혁", "team": "개인"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "136-2", "title": "남자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "박병관", "team": "폴링"}, {"lane": 3, "name": "박성배", "team": "개인"}, {"lane": 4, "name": "황관수", "team": "TOP 10"}, {"lane": 5, "name": "성제림", "team": "개미지옥 PM7"}, {"lane": 6, "name": "이은진", "team": "웨이브 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "136-3", "title": "남자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "서봉석", "team": "웨이브 B"}, {"lane": 3, "name": "박종선", "team": "NINE C"}, {"lane": 4, "name": "김대호", "team": "NINE B"}, {"lane": 5, "name": "임대건", "team": "일레븐 B"}, {"lane": 6, "name": "김서후", "team": "개미지옥 PM7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "136-4", "title": "남자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "심준식", "team": "일레븐 A"}, {"lane": 3, "name": "양철환", "team": "TOP 10"}, {"lane": 4, "name": "윤승녕", "team": "웨이브 A"}, {"lane": 5, "name": "김동협", "team": "개미지옥 PM7"}, {"lane": 6, "name": "강인한", "team": "NINE A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "136-5", "title": "남자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "김민욱", "team": "개미지옥 PM7"}, {"lane": 3, "name": "김만승", "team": "TOP 10"}, {"lane": 4, "name": "이종명", "team": "NINE A"}, {"lane": 5, "name": "신지훈", "team": "NINE B"}, {"lane": 6, "name": "송동석", "team": "일레븐 A"}, {"lane": 7, "name": "박성근", "team": "롤링"}]}, {"no": "137-1", "title": "여자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "이진아", "team": "폴링"}, {"lane": 3, "name": "강지희", "team": "개인"}, {"lane": 4, "name": "김수미", "team": "일레븐 B"}, {"lane": 5, "name": "박은정", "team": "개미지옥 PM7"}, {"lane": 6, "name": "손민영", "team": "NINE B"}, {"lane": 7, "name": "김은혜", "team": "웨이브 B"}]}, {"no": "137-2", "title": "여자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "권수연", "team": "일레븐 B"}, {"lane": 3, "name": "장은영", "team": "개인"}, {"lane": 4, "name": "이상미", "team": "웨이브 A"}, {"lane": 5, "name": "이혜진", "team": "NINE C"}, {"lane": 6, "name": "김정옥", "team": "IM STAR"}, {"lane": 7, "name": "원지혜", "team": "NINE B"}]}, {"no": "137-3", "title": "여자성인부 자유형 50m 2그룹", "lanes": [{"lane": 2, "name": "이명자", "team": "IM STAR"}, {"lane": 3, "name": "허진영", "team": "4 J"}, {"lane": 4, "name": "박은숙", "team": "웨이브 A"}, {"lane": 5, "name": "유선애", "team": "하이파이브"}, {"lane": 6, "name": "신효선", "team": "TOP 10"}, {"lane": 7, "name": "남지선", "team": "NINE A"}]}, {"no": "138-1", "title": "남자성인부 자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "정성구", "team": "일레븐 A"}, {"lane": 4, "name": "이장길", "team": "개미지옥 PM7"}, {"lane": 5, "name": "방현우", "team": "폴링"}, {"lane": 6, "name": "설권영", "team": "일레븐 B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "138-2", "title": "남자성인부 자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "김세규", "team": "IM STAR"}, {"lane": 3, "name": "박준영", "team": "일레븐 B"}, {"lane": 4, "name": "남일근", "team": "롤링"}, {"lane": 5, "name": "김관중", "team": "일레븐 A"}, {"lane": 6, "name": "서종경", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "139", "title": "여자성인부 자유형 50m 3그룹", "lanes": [{"lane": 2, "name": "김주양", "team": "롤링"}, {"lane": 3, "name": "장기정", "team": "일레븐 A"}, {"lane": 4, "name": "서하나", "team": "NINE A"}, {"lane": 5, "name": "정은식", "team": "TOP 10"}, {"lane": 6, "name": "윤현희", "team": "웨이브 A"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "140", "title": "남자성인부 자유형 50m 4그룹", "lanes": [{"lane": 2, "name": "윤주현", "team": "개인"}, {"lane": 3, "name": "김선수", "team": "NINE A"}, {"lane": 4, "name": "이가헌", "team": "일레븐 A"}, {"lane": 5, "name": "김남섭", "team": "TOP 10"}, {"lane": 6, "name": "조동호", "team": "NINE A"}, {"lane": 7, "name": "박문수", "team": "롤링"}]}, {"no": "141", "title": "여자성인부 자유형 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "우금욱", "team": "롤링"}, {"lane": 4, "name": "제금란", "team": "NINE A"}, {"lane": 5, "name": "김명희", "team": "웨이브 A"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "142-1", "title": "남자성인부 짝핀접영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "조중훈", "team": "롤링"}, {"lane": 4, "name": "이관민", "team": "IM STAR"}, {"lane": 5, "name": "박건유", "team": "웨이브 B"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "142-2", "title": "남자성인부 짝핀접영 50m 1그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "최원진", "team": "4 J"}, {"lane": 4, "name": "송윤근", "team": "TOP 10"}, {"lane": 5, "name": "장재원", "team": "NINE A"}, {"lane": 6, "name": "방정규", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "143-1", "title": "여자성인부 짝핀접영 50m 1그룹", "lanes": [{"lane": 2, "name": "장현정", "team": "개미지옥 PM7"}, {"lane": 3, "name": "권나연", "team": "IM 7"}, {"lane": 4, "name": "이혜진", "team": "롤링"}, {"lane": 5, "name": "안효빈", "team": "IM 7"}, {"lane": 6, "name": "김다혜", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "143-2", "title": "여자성인부 짝핀접영 50m 1그룹", "lanes": [{"lane": 2, "name": "장원", "team": "IM 7"}, {"lane": 3, "name": "윤지선", "team": "IM 7"}, {"lane": 4, "name": "정수영", "team": "IM 7"}, {"lane": 5, "name": "장환", "team": "IM 7"}, {"lane": 6, "name": "김채린", "team": "폴링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "144-1", "title": "남자성인부 짝핀접영 50m 2그룹", "lanes": [{"lane": 2, "name": "함영수", "team": "IM STAR"}, {"lane": 3, "name": "양영목", "team": "NINE B"}, {"lane": 4, "name": "편진석", "team": "개미지옥 PM7"}, {"lane": 5, "name": "박종선", "team": "NINE C"}, {"lane": 6, "name": "황관수", "team": "TOP 10"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "144-2", "title": "남자성인부 짝핀접영 50m 2그룹", "lanes": [{"lane": 2, "name": "이준영", "team": "NINE B"}, {"lane": 3, "name": "김만승", "team": "TOP 10"}, {"lane": 4, "name": "김기준", "team": "롤링"}, {"lane": 5, "name": "장인택", "team": "웨이브 A"}, {"lane": 6, "name": "방민철", "team": "개미지옥 PM7"}, {"lane": 7, "name": "신동관", "team": "웨이브 B"}]}, {"no": "144-3", "title": "남자성인부 짝핀접영 50m 2그룹", "lanes": [{"lane": 2, "name": "이성진", "team": "롤링"}, {"lane": 3, "name": "양철환", "team": "TOP 10"}, {"lane": 4, "name": "전진형", "team": "폴링"}, {"lane": 5, "name": "김수현", "team": "웨이브 B"}, {"lane": 6, "name": "한철규", "team": "하이파이브"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "145-1", "title": "여자성인부 짝핀접영 50m 2그룹", "lanes": [{"lane": 2, "name": "이지영", "team": "롤링"}, {"lane": 3, "name": "손은영", "team": "웨이브 C"}, {"lane": 4, "name": "구옥진", "team": "하이파이브"}, {"lane": 5, "name": "정혜란", "team": "일레븐 A"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "145-2", "title": "여자성인부 짝핀접영 50m 2그룹", "lanes": [{"lane": 2, "name": "정영애", "team": "롤링"}, {"lane": 3, "name": "김현숙", "team": "웨이브 B"}, {"lane": 4, "name": "백윤희", "team": "일레븐 A"}, {"lane": 5, "name": "엄윤진", "team": "TOP 10"}, {"lane": 6, "name": "강지희", "team": "개인"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "146-1", "title": "남자성인부 짝핀접영 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "이근화", "team": "NINE B"}, {"lane": 4, "name": "남일근", "team": "롤링"}, {"lane": 5, "name": "현철환", "team": "TOP 10"}, {"lane": 6, "name": "엄태흠", "team": "폴링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "146-2", "title": "남자성인부 짝핀접영 50m 3그룹", "lanes": [{"lane": 2, "name": "박준영", "team": "일레븐 B"}, {"lane": 3, "name": "권충기", "team": "NINE B"}, {"lane": 4, "name": "김상철", "team": "웨이브 A"}, {"lane": 5, "name": "이춘섭", "team": "IM STAR"}, {"lane": 6, "name": "김일윤", "team": "NINE B"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "147-1", "title": "여자성인부 짝핀접영 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "곽노희", "team": "웨이브 A"}, {"lane": 4, "name": "김서영", "team": "TOP 10"}, {"lane": 5, "name": "박효민", "team": "IM STAR"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "147-2", "title": "여자성인부 짝핀접영 50m 3그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "강도정", "team": "일레븐 A"}, {"lane": 4, "name": "이혜진", "team": "웨이브 A"}, {"lane": 5, "name": "이정현", "team": "개미지옥 PM7"}, {"lane": 6, "name": "김은미", "team": "IM 7"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "148", "title": "남자성인부 짝핀접영 50m 4그룹", "lanes": [{"lane": 2, "name": "정연식", "team": "웨이브 A"}, {"lane": 3, "name": "김시덕", "team": "NINE A"}, {"lane": 4, "name": "조원준", "team": "일레븐 A"}, {"lane": 5, "name": "유현규", "team": "TOP 10"}, {"lane": 6, "name": "김명환", "team": "롤링"}, {"lane": 7, "name": "", "team": ""}]}, {"no": "149", "title": "여자성인부 짝핀접영 50m 4그룹", "lanes": [{"lane": 2, "name": "", "team": ""}, {"lane": 3, "name": "", "team": ""}, {"lane": 4, "name": "이찬숙", "team": "웨이브 A"}, {"lane": 5, "name": "연인숙", "team": "NINE B"}, {"lane": 6, "name": "", "team": ""}, {"lane": 7, "name": "", "team": ""}]}, {"no": "150-1", "title": "혼성혼계영 200m", "lanes": [{"lane": 2, "team": "폴링"}, {"lane": 3, "team": "IM 7"}, {"lane": 4, "team": "4 J"}, {"lane": 5, "team": "개미지옥 PM7"}, {"lane": 6, "team": "NINE B"}, {"lane": 7, "team": "웨이브 B"}]}, {"no": "150-2", "title": "혼성혼계영 200m", "lanes": [{"lane": 2, "team": "일레븐 A"}, {"lane": 3, "team": "롤링"}, {"lane": 4, "team": "NINE A"}, {"lane": 5, "team": "IM STAR"}, {"lane": 6, "team": "웨이브 A"}, {"lane": 7, "team": "TOP 10"}]}];
+const EVENTS=[
+ {k:"relay",n:"혼성 계영 200m",s:"11:00",e:"11:10",match:h=>h.no.startsWith("101")},
+ {rest:1,s:"11:10",e:"11:20",n:"휴식 10분"},
+ {k:"finfree",n:"짝핀 자유형 50m",s:"11:20",e:"12:05",match:h=>/짝핀자유형/.test(h.title)},
+ {k:"back",n:"배영 50m",s:"12:05",e:"12:35",match:h=>/ 배영/.test(h.title)},
+ {k:"fly",n:"접영 50m",s:"12:35",e:"13:05",match:h=>/ 접영/.test(h.title)},
+ {k:"breast",n:"평영 50m",s:"13:05",e:"13:40",match:h=>/평영/.test(h.title)},
+ {k:"free",n:"자유형 50m",s:"13:40",e:"14:30",match:h=>/ 자유형/.test(h.title)},
+ {k:"finfly",n:"짝핀 접영 50m",s:"14:30",e:"15:10",match:h=>/짝핀접영/.test(h.title)},
+ {rest:1,s:"15:10",e:"15:20",n:"휴식 10분"},
+ {k:"medley",n:"혼성 혼계영 200m",s:"15:20",e:"15:30",match:h=>h.no.startsWith("150")},
+ {award:1,s:"15:55",e:"16:00",n:"종합 시상식"}
+];
+const RACE=EVENTS.filter(e=>e.k);
+HEATS.forEach(h=>{const ev=RACE.find(e=>e.match(h));h.ev=ev;h.relay=/계영/.test(h.title);
+  h.label=h.title.replace("성인부"," ").replace(/\s+/g," ").trim();});
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>(s||"").replace(/\s+/g,"").toLowerCase();
+const isNine=t=>/^NINE/i.test(t||"");
+const HEART=`<svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.5C5 16 1 12.3 1 7.4 1 3.9 3.7 1 7.1 1c2 0 3.8 1 4.9 2.6C13.1 2 14.9 1 16.9 1 20.3 1 23 3.9 23 7.4c0 4.9-4 8.6-11 14.1z"/></svg>`;
+const plate=(n,sm,pk)=>`<span class="plate${sm?" sm":""}${pk?" pk":""}"><small>LANE</small><b>${n}</b></span>`;
+let st={v:"find",ev:"relay",sex:"all"};
+try{Object.assign(st,JSON.parse(localStorage.getItem("assf26b")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("assf26b",JSON.stringify(st))}catch(e){}};
+
+/* 지금 진행 중인 경기 (대회 당일에만) */
+function nowKey(){const d=new Date(Date.now()+9*3600e3);if(d.toISOString().slice(0,10)!=="2026-10-25")return null;
+ const m=d.getUTCHours()*60+d.getUTCMinutes();const toM=t=>+t.slice(0,2)*60+ +t.slice(3);
+ const cur=EVENTS.find(e=>m>=toM(e.s)&&m<toM(e.e));return cur||null}
+
+function show(v){st.v=v;save();
+ document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));
+ ["find","sched","heats","pdf"].forEach(x=>$("#v-"+x).hidden=x!==v);
+ window.scrollTo(0,0); if(v==="pdf")loadPdf(); if(v==="sched")renderSched();
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+/* 검색 */
+function hl(text,q){if(!q)return esc(text);const t=String(text);const nt=t.replace(/\s+/g,"").toLowerCase();const i=nt.indexOf(q);
+ if(i<0)return esc(t);let a=-1,b=-1,c=0;for(let j=0;j<t.length;j++){if(/\s/.test(t[j]))continue;if(c===i)a=j;if(c===i+q.length-1){b=j+1;break}c++}
+ return a<0?esc(t):esc(t.slice(0,a))+"<mark>"+esc(t.slice(a,b))+"</mark>"+esc(t.slice(b))}
+function find(){
+ const raw=$("#q").value;const q=norm(raw);$("#clr").hidden=!raw;
+ if(!q){
+  let teams=[...new Set(HEATS.flatMap(h=>h.lanes.map(l=>l.team)).filter(Boolean))].filter(t=>t!=="개인");
+  teams.sort((a,b)=>(isNine(b)-isNine(a))||a.localeCompare(b,"ko"));
+  $("#findres").innerHTML=`<ul class="helplist"><li>이름 검색: 출전 종목 · 조 · 레인 · 경기 시간</li><li>팀 검색: 팀원 전체</li><li>이름 일부만 입력해도 검색 가능</li></ul><p class="label">팀으로 보기</p><div class="hint">${teams.map(t=>`<button data-t="${esc(t)}" class="${isNine(t)?"nine":""}">${esc(t)}</button>`).join("")}</div>`;return}
+ const map=new Map();
+ HEATS.forEach(h=>h.lanes.forEach(l=>{
+  if(!l.team)return;
+  const key=h.relay?"팀|"+l.team:l.name+"|"+l.team;
+  if(!(norm(l.name).includes(q)||norm(l.team).includes(q)))return;
+  if(!map.has(key))map.set(key,{name:h.relay?l.team+" (팀)":l.name,team:h.relay?"단체전":l.team,relay:h.relay,list:[]});
+  map.get(key).list.push({h,l});
+ }));
+ let ppl=[...map.values()].sort((a,b)=>(a.relay-b.relay)||(norm(a.name).includes(q)?0:1)-(norm(b.name).includes(q)?0:1)||a.name.localeCompare(b.name,"ko"));
+ if(!ppl.length){$("#findres").innerHTML=`<p class="helptext">"${esc(raw)}" 검색 결과 없음</p>`;return}
+ const n=ppl.filter(p=>!p.relay).length;
+ $("#findres").innerHTML=`<p class="count">${n} SWIMMERS${ppl.length>n?` · ${ppl.length-n} RELAY`:""}</p><div class="people">`+ppl.map(p=>{const nine=isNine(p.relay?p.name:p.team);return `
+  <article class="person${nine?" nine":""}"><div class="top"><div class="pn">${hl(p.name,q)}</div><div class="pt">${hl(p.team,q)}</div></div>
+  <div class="list">${p.list.map(({h,l})=>`<div class="entry">${plate(l.lane,0,nine)}<div class="ev"><b>${esc(h.label)}</b><span>HEAT ${h.no} · ${h.ev?`${RACE.indexOf(h.ev)+1}경기 ${h.ev.s}–${h.ev.e}`:""}</span></div></div>`).join("")}</div>
+  <div class="foot"><span>${p.list.length} ${p.list.length>1?"Races":"Race"}</span><span>${nine?`I${HEART}AM 9`:"Asan Masters"}</span></div>
+  </article>`}).join("")+`</div>`;
+}
+$("#q").addEventListener("input",find);
+$("#clr").onclick=()=>{$("#q").value="";find();$("#q").focus()};
+$("#findres").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(b){$("#q").value=b.dataset.t;find()}});
+
+/* 시간표 */
+function renderSched(){const now=nowKey();
+ $("#sched").innerHTML=EVENTS.map(e=>{
+  const isNow=now===e;
+  if(e.rest)return `<li class="tl rest"><span class="clock">${e.s}</span><span class="dot"></span><div class="box">${e.n}</div></li>`;
+  if(e.award)return `<li class="tl${isNow?" now":""}"><span class="clock">${e.s}</span><span class="dot"></span><div class="box" style="cursor:default"><span><span class="nm">${e.n}${isNow?'<span class="badge">진행 중</span>':""}</span><span class="meta">${e.s} ~ ${e.e}</span></span></div></li>`;
+  const cnt=HEATS.filter(e.match).length;
+  return `<li class="tl${isNow?" now":""}"><span class="clock">${e.s}</span><span class="dot"></span><button class="box" data-k="${e.k}"><span><span class="nm">${RACE.indexOf(e)+1}경기 · ${e.n}${isNow?'<span class="badge">진행 중</span>':""}</span><span class="meta">${e.s} ~ ${e.e} · ${cnt}개 조${e.k==="medley"?" · 배→평→접→자":""}</span></span><span class="arrow">조 편성 ›</span></button></li>`;
+ }).join("");
+}
+$("#sched").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;st.ev=b.dataset.k;st.sex="all";renderHeats();show("heats")});
+
+/* 조편성 */
+function renderHeats(){
+ $("#evchips").innerHTML=RACE.map((e,i)=>`<button aria-pressed="${st.ev===e.k}" data-k="${e.k}">${i+1}. ${e.n}</button>`).join("");
+ const e=RACE.find(x=>x.k===st.ev)||RACE[0];const mixed=e.k==="relay"||e.k==="medley";
+ $("#sexchips").hidden=mixed;
+ $("#sexchips").innerHTML=[["all","남녀 전체"],["m","남자"],["w","여자"]].map(([k,t])=>`<button aria-pressed="${st.sex===k}" data-s="${k}">${t}</button>`).join("");
+ let list=HEATS.filter(e.match);
+ if(!mixed&&st.sex!=="all")list=list.filter(h=>h.title.startsWith(st.sex==="m"?"남자":"여자"));
+ $("#heatlist").innerHTML=list.map(h=>`<article class="heat"><h3><span class="no">${h.no}</span><span>${esc(h.label)}</span></h3><ol>${
+  h.lanes.map(l=>{const has=h.relay?l.team:l.name;const nn=isNine(l.team);return `<li class="${has?"":"empty"}${nn?" nine":""}">${plate(l.lane,1,nn)}<span class="who">${has?esc(h.relay?l.team:l.name):"빈 레인"}</span><span class="club">${h.relay?"":esc(l.team)}</span></li>`}).join("")}</ol></article>`).join("")
+  +(mixed?`<p class="note">팀별 출전 선수 명단: 경기 시작 30분 전까지 제출</p>`:"");
+ const a=$("#evchips [aria-pressed=true]");if(a)a.scrollIntoView({inline:"center",block:"nearest"});
+}
+$("#evchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;st.ev=b.dataset.k;save();renderHeats()});
+$("#sexchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-s]");if(!b)return;st.sex=b.dataset.s;save();renderHeats()});
+
+/* PDF */
+let pdfLoaded=false;
+async function loadPdf(){if(pdfLoaded)return;pdfLoaded=true;const box=$("#pages");
+ try{
+  pdfjsLib.GlobalWorkerOptions.workerSrc="pdf.worker.min.js";
+  const doc=await pdfjsLib.getDocument("heatsheet.pdf").promise;box.innerHTML="";
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  for(let i=1;i<=doc.numPages;i++){
+   const page=await doc.getPage(i);const w=box.clientWidth||600;const v0=page.getViewport({scale:1});
+   const vp=page.getViewport({scale:w/v0.width*dpr});const c=document.createElement("canvas");
+   c.width=vp.width;c.height=vp.height;c.setAttribute("aria-label",i+"쪽");box.appendChild(c);
+   await page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;
+  }
+ }catch(err){pdfLoaded=false;box.innerHTML=`<p class="loading">PDF 표시 불가 · 위 "PDF 파일로 열기" 이용</p>`}
+}
+
+renderHeats();find();show(st.v);
+</script>
+</body>
+</html>
