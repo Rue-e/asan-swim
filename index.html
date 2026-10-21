@@ -58,6 +58,8 @@ h2{font-family:var(--cond);font-weight:800;font-size:1.5rem;letter-spacing:.06em
 .tabs button[aria-selected="true"]::before{content:"";position:absolute;top:-1px;left:30%;right:30%;height:3px;background:var(--pink)}
 
 /* 검색 */
+.searchbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);padding-block:10px;margin-top:-10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:16;background:var(--bg)}
 .searchbox{position:relative}
 .searchbox input{width:100%;font:500 1.05rem var(--kr);padding:15px 46px 15px 16px;border-radius:14px;border:1.5px solid #3a3a3d;background:var(--panel);color:var(--ink);-webkit-appearance:none;appearance:none}
 .searchbox input::placeholder{color:var(--dim)}
@@ -153,10 +155,10 @@ mark{background:none;color:var(--pink-txt);text-decoration:underline;text-underl
 
 <main class="wrap">
 <section id="v-find">
-  <div class="searchbox">
-    <input id="q" type="search" placeholder="이름 또는 팀 이름 검색" autocomplete="off" enterkeyhint="search" aria-label="이름 또는 팀 이름 검색">
-    <button class="clear" id="clr" aria-label="지우기" hidden>×</button>
-  </div>
+  <form class="searchbar" id="sf" role="search" action="#" autocomplete="off"><div class="searchbox">
+    <input id="q" name="q" type="search" placeholder="이름 또는 팀 이름 검색" autocomplete="off" enterkeyhint="search" aria-label="이름 또는 팀 이름 검색">
+    <button type="button" class="clear" id="clr" aria-label="지우기" hidden>×</button>
+  </div></form>
   <div id="findres"></div>
 </section>
 
@@ -214,7 +216,7 @@ const isNine=t=>/^NINE/i.test(t||"");
 const HEART=`<svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.5C5 16 1 12.3 1 7.4 1 3.9 3.7 1 7.1 1c2 0 3.8 1 4.9 2.6C13.1 2 14.9 1 16.9 1 20.3 1 23 3.9 23 7.4c0 4.9-4 8.6-11 14.1z"/></svg>`;
 const plate=(n,sm,pk)=>`<span class="plate${sm?" sm":""}${pk?" pk":""}"><small>LANE</small><b>${n}</b></span>`;
 let st={v:"find",ev:"mix1",sex:"all"};
-try{Object.assign(st,JSON.parse(localStorage.getItem("assf26c")||"{}"))}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("assf26c")||"{}");if(s.ev)st.ev=s.ev;if(s.sex)st.sex=s.sex}catch(e){}
 const save=()=>{try{localStorage.setItem("assf26c",JSON.stringify(st))}catch(e){}};
 
 /* 지금 진행 중인 경기 (대회 당일에만) */
@@ -222,12 +224,26 @@ function nowKey(){const d=new Date(Date.now()+9*3600e3);if(d.toISOString().slice
  const m=d.getUTCHours()*60+d.getUTCMinutes();const toM=t=>+t.slice(0,2)*60+ +t.slice(3);
  const cur=EVENTS.find(e=>m>=toM(e.s)&&m<toM(e.e));return cur||null}
 
-function show(v){st.v=v;save();
+function show(v,y){st.v=v;save();
  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));
  ["find","sched","heats","pdf"].forEach(x=>$("#v-"+x).hidden=x!==v);
- window.scrollTo(0,0); if(v==="pdf")loadPdf(); if(v==="sched")renderSched();
+ if(v==="pdf")loadPdf(); if(v==="sched")renderSched();
+ window.scrollTo(0,y||0);
 }
-document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+/* 이동 기록: 화면이 바뀔 때마다 브라우저 기록을 남겨 뒤로 가기가 앱처럼 동작 */
+try{history.scrollRestoration="manual"}catch(e){}
+const snap=()=>({v:st.v,ev:st.ev,sex:st.sex,q:$("#q").value});
+function remember(){try{history.replaceState(Object.assign(snap(),{y:window.scrollY}),"")}catch(e){}}
+function go(){remember();try{history.pushState(snap(),"")}catch(e){}}
+function sync(){try{history.replaceState(Object.assign(snap(),{y:window.scrollY}),"")}catch(e){}}
+window.addEventListener("popstate",e=>{const s=e.state;if(!s)return;
+ st.ev=s.ev||st.ev;st.sex=s.sex||st.sex;$("#q").value=s.q||"";
+ find();renderHeats();$("#q").blur();show(s.v||"find",s.y||0);newTerm=true;prevQ=s.q||"";});
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+ const v=b.dataset.v;
+ if(v===st.v){window.scrollTo(0,0);if(v==="find"){$("#q").focus()}return}
+ remember();show(v);try{history.pushState(snap(),"")}catch(e){}
+});
 
 /* 검색 */
 function hl(text,q){if(!q)return esc(text);const t=String(text);const nt=t.replace(/\s+/g,"").toLowerCase();const i=nt.indexOf(q);
@@ -256,9 +272,27 @@ function find(){
   <div class="foot"><span>${p.list.length} ${p.list.length>1?"Races":"Race"}</span><span>${nine?`I${HEART}AM 9`:"Asan Masters"}</span></div>
   </article>`}).join("")+`</div>`;
 }
-$("#q").addEventListener("input",find);
-$("#clr").onclick=()=>{$("#q").value="";find();$("#q").focus()};
-$("#findres").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(b){$("#q").value=b.dataset.t;find()}});
+let newTerm=true,prevQ="";
+$("#q").addEventListener("input",()=>{
+ const val=$("#q").value;
+ if(newTerm&&val&&val!==prevQ){newTerm=false;
+  try{history.replaceState(Object.assign(snap(),{q:prevQ,y:window.scrollY}),"")}catch(e){}
+  find();window.scrollTo(0,0);try{history.pushState(snap(),"")}catch(e){}
+ }else{find();window.scrollTo(0,0);sync()}
+ prevQ=val;
+});
+/* 검색창을 누르면 기존 검색어 전체 선택 → 바로 새 이름 입력 */
+let typedSinceFocus=false;
+$("#q").addEventListener("focus",()=>{newTerm=true;typedSinceFocus=false;const el=$("#q");try{el.select()}catch(e){}
+ setTimeout(()=>{if(!typedSinceFocus&&document.activeElement===el){try{el.setSelectionRange(0,el.value.length)}catch(e){}}},0)});
+$("#q").addEventListener("beforeinput",()=>{typedSinceFocus=true});
+/* 키보드 검색 버튼 → 키보드 내림 */
+$("#sf").addEventListener("submit",e=>{e.preventDefault();$("#q").blur()});
+/* 결과를 스크롤하기 시작하면 키보드 내림 */
+document.addEventListener("touchmove",e=>{if(document.activeElement===$("#q")&&!e.target.closest("#sf"))$("#q").blur()},{passive:true});
+$("#clr").onclick=()=>{$("#q").value="";prevQ="";find();sync();newTerm=true;$("#q").focus()};
+$("#findres").addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;
+ remember();$("#q").value=b.dataset.t;prevQ=b.dataset.t;find();window.scrollTo(0,0);try{history.pushState(snap(),"")}catch(e){}});
 
 /* 시간표 */
 function renderSched(){const now=nowKey();
@@ -270,7 +304,7 @@ function renderSched(){const now=nowKey();
   return `<li class="tl${isNow?" now":""}"><span class="clock">${e.s}</span><span class="dot"></span><button class="box" data-k="${e.k}"><span><span class="nm">${RACE.indexOf(e)+1}경기 · ${e.n}${isNow?'<span class="badge">진행 중</span>':""}</span><span class="meta">${e.s} ~ ${e.e} · ${cnt}개 조${e.k==="mix1"?" · 배→평→접→자":""}</span></span><span class="arrow">조 편성 ›</span></button></li>`;
  }).join("");
 }
-$("#sched").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;st.ev=b.dataset.k;st.sex="all";renderHeats();show("heats")});
+$("#sched").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;remember();st.ev=b.dataset.k;st.sex="all";renderHeats();show("heats");try{history.pushState(snap(),"")}catch(e){}});
 
 /* 조편성 */
 function renderHeats(){
@@ -285,8 +319,8 @@ function renderHeats(){
   +(mixed?`<p class="note">팀별 출전 선수 명단: 경기 시작 30분 전까지 제출</p>`:"");
  const a=$("#evchips [aria-pressed=true]");if(a)a.scrollIntoView({inline:"center",block:"nearest"});
 }
-$("#evchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;st.ev=b.dataset.k;save();renderHeats()});
-$("#sexchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-s]");if(!b)return;st.sex=b.dataset.s;save();renderHeats()});
+$("#evchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-k]");if(!b)return;st.ev=b.dataset.k;save();renderHeats();sync()});
+$("#sexchips").addEventListener("click",ev=>{const b=ev.target.closest("[data-s]");if(!b)return;st.sex=b.dataset.s;save();renderHeats();sync()});
 
 /* PDF */
 let pdfDoc=null,pdfZoom=1,pdfJob=0,pdfStarted=false;
@@ -319,7 +353,7 @@ async function loadPdf(){if(pdfStarted)return;pdfStarted=true;
  }catch(err){pdfStarted=false;$("#pages").innerHTML=`<p class="loading">PDF 표시 불가 · 위 "PDF 파일로 열기" 이용</p>`}
 }
 
-renderHeats();find();show(st.v);
+renderHeats();find();show("find");try{history.replaceState(snap(),"")}catch(e){}
 </script>
 </body>
 </html>
