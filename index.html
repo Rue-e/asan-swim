@@ -175,7 +175,7 @@ mark{background:none;color:var(--pink-txt);text-decoration:underline;text-underl
 <section id="v-pdf" hidden>
   <div class="pdfbar">
     <div><h2>Original PDF</h2><p class="label" style="margin:0">원본 대회 요강</p></div>
-    <a class="btn" href="heatsheet.pdf" target="_blank" rel="noopener">PDF 파일로 열기</a>
+    <a class="btn" href="heatsheet.pdf?v=28p" target="_blank" rel="noopener">PDF 파일로 열기</a>
   </div>
   <div class="pagewrap" id="pagewrap"><div class="pages" id="pages"><p class="loading">불러오는 중…</p></div></div>
 </section>
@@ -315,7 +315,7 @@ async function renderPdf(){const job=++pdfJob;const box=$("#pages");
 }
 async function loadPdf(){if(pdfStarted)return;pdfStarted=true;
  try{pdfjsLib.GlobalWorkerOptions.workerSrc="pdf.worker.min.js";
-  pdfDoc=await pdfjsLib.getDocument("heatsheet.pdf").promise;await renderPdf();
+  pdfDoc=await pdfjsLib.getDocument("heatsheet.pdf?v=28p").promise;await renderPdf();
  }catch(err){pdfStarted=false;$("#pages").innerHTML=`<p class="loading">PDF 표시 불가 · 위 "PDF 파일로 열기" 이용</p>`}
 }
 
