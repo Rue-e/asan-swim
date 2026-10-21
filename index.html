@@ -135,9 +135,6 @@ mark{background:none;color:var(--pink-txt);text-decoration:underline;text-underl
 .pdfbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
 .pdfbar h2{margin:0}
 .btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--pink);color:var(--pink-ink);padding:9px 14px;border-radius:10px;font-weight:700;font-size:.88rem;text-decoration:none;cursor:pointer}
-.zoom{display:flex;gap:6px;margin-bottom:12px}
-.zoom button{flex:1;border:1px solid #333336;background:var(--panel);border-radius:10px;padding:8px 0;font-size:.85rem;cursor:pointer}
-.zoom button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
 .pagewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) ;padding:0 max(8px,env(safe-area-inset-left,0px))}
 .pages{display:flex;flex-direction:column;gap:10px;width:100%}
 .pages canvas{display:block;background:#fff;border-radius:6px;max-width:none}
@@ -180,7 +177,6 @@ mark{background:none;color:var(--pink-txt);text-decoration:underline;text-underl
     <div><h2>Original PDF</h2><p class="label" style="margin:0">원본 대회 요강</p></div>
     <a class="btn" href="heatsheet.pdf" target="_blank" rel="noopener">PDF 파일로 열기</a>
   </div>
-  <div class="zoom" id="zoom"><button data-z="1" aria-pressed="true">화면 맞춤</button><button data-z="1.5" aria-pressed="false">1.5배</button><button data-z="2" aria-pressed="false">2배</button></div>
   <div class="pagewrap" id="pagewrap"><div class="pages" id="pages"><p class="loading">불러오는 중…</p></div></div>
 </section>
 </main>
@@ -306,12 +302,12 @@ async function renderPdf(){const job=++pdfJob;const box=$("#pages");
  for(let i=1;i<=pdfDoc.numPages;i++){
   if(job!==pdfJob)return;
   const page=await pdfDoc.getPage(i);const v0=page.getViewport({scale:1});
-  let s=W*dpr*1.5/v0.width;const maxPx=12e6;if(v0.width*v0.height*s*s>maxPx)s=Math.sqrt(maxPx/(v0.width*v0.height));
+  let s=W*dpr*2.5/v0.width;const maxPx=12e6;if(v0.width*v0.height*s*s>maxPx)s=Math.sqrt(maxPx/(v0.width*v0.height));
   const vp=page.getViewport({scale:s});
   const tmp=document.createElement("canvas");tmp.width=Math.round(vp.width);tmp.height=Math.round(vp.height);
   await page.render({canvasContext:tmp.getContext("2d"),viewport:vp}).promise;
   if(job!==pdfJob)return;
-  const b=trimBox(tmp);const k=Math.min((W*dpr)/b.w,Math.sqrt(12e6/(b.w*b.h)));
+  const b=trimBox(tmp);const k=Math.min((W*dpr*2)/b.w,Math.sqrt(12e6/(b.w*b.h)));
   const c=document.createElement("canvas");c.width=Math.round(b.w*k);c.height=Math.round(b.h*k);
   const g=c.getContext("2d");g.imageSmoothingQuality="high";g.drawImage(tmp,b.x,b.y,b.w,b.h,0,0,c.width,c.height);
   c.style.width=W+"px";c.style.height=(b.h*W/b.w)+"px";c.setAttribute("aria-label",i+"쪽");box.appendChild(c);
@@ -322,9 +318,6 @@ async function loadPdf(){if(pdfStarted)return;pdfStarted=true;
   pdfDoc=await pdfjsLib.getDocument("heatsheet.pdf").promise;await renderPdf();
  }catch(err){pdfStarted=false;$("#pages").innerHTML=`<p class="loading">PDF 표시 불가 · 위 "PDF 파일로 열기" 이용</p>`}
 }
-$("#zoom").addEventListener("click",e=>{const b=e.target.closest("[data-z]");if(!b||!pdfDoc)return;
- pdfZoom=+b.dataset.z;document.querySelectorAll("#zoom button").forEach(x=>x.setAttribute("aria-pressed",x===b));
- $("#pagewrap").scrollLeft=0;renderPdf()});
 
 renderHeats();find();show(st.v);
 </script>
